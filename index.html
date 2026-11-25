@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChocoCraft - ร้านช็อกโกแลตแท่ง</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-amber-50 text-stone-800">
+  <header class="bg-amber-950 text-white py-8 text-center">
+    <h1 class="text-3xl font-bold">🍫 ChocoCraft Bar</h1>
+    <p class="text-amber-200 mt-1">ช็อกโกแลตแท่งโฮมเมด จัดส่งทั่วประเทศ</p>
+  </header>
+  <main class="max-w-3xl mx-auto p-6">
+    <div class="grid md:grid-cols-2 gap-6 mb-8">
+      <div class="bg-white p-4 rounded-xl shadow text-center">
+        <img src="images/dark-choc.svg" class="w-full h-40 object-cover rounded mb-3">
+        <span class="text-xs bg-amber-900 text-white px-2 py-1 rounded">SKU: DARK-75</span>
+        <h2 class="text-lg font-bold mt-2">Dark Chocolate 75%</h2>
+        <p class="text-amber-900 font-bold my-2">120 บาท / แท่ง</p>
+        จำนวน: <input type="number" id="sku1" value="0" min="0" oninput="calc()" class="border rounded w-20 p-1 text-center">
+      </div>
+      <div class="bg-white p-4 rounded-xl shadow text-center">
+        <img src="images/milk-choc.svg" class="w-full h-40 object-cover rounded mb-3">
+        <span class="text-xs bg-amber-700 text-white px-2 py-1 rounded">SKU: MILK-01</span>
+        <h2 class="text-lg font-bold mt-2">Classic Milk Chocolate</h2>
+        <p class="text-amber-900 font-bold my-2">100 บาท / แท่ง</p>
+        จำนวน: <input type="number" id="sku2" value="0" min="0" oninput="calc()" class="border rounded w-20 p-1 text-center">
+      </div>
+    </div>
+    <form id="orderForm" class="bg-white p-6 rounded-xl shadow space-y-4">
+      <h3 class="text-lg font-bold border-b pb-2">📦 ข้อมูลสำหรับแพ็กและจ่าหน้าพัสดุ</h3>
+      <input type="text" id="fullName" required placeholder="ชื่อ-นามสกุล ผู้รับ *" class="w-full border rounded p-2">
+      <input type="tel" id="phone" required placeholder="เบอร์โทรศัพท์ *" class="w-full border rounded p-2">
+      <textarea id="address" rows="3" required placeholder="ที่อยู่จัดส่งพร้อมรหัสไปรษณีย์ *" class="w-full border rounded p-2"></textarea>
+      <div class="bg-amber-100 p-3 rounded font-bold flex justify-between">
+        <span>ยอดรวม:</span> <span id="total">0 บาท</span>
+      </div>
+      <button type="submit" id="btn" class="w-full bg-amber-900 text-white font-bold py-3 rounded">ยืนยันการสั่งซื้อ</button>
+    </form>
+  </main>
+  <script>
+    const URL = 'วางลิงก์_WEB_APP_URL_ที่นี่';
+    function calc() {
+      const t = (Number(sku1.value)*120) + (Number(sku2.value)*100);
+      total.innerText = t + ' บาท';
+      return t;
+    }
+    orderForm.onsubmit = (e) => {
+      e.preventDefault();
+      if (Number(sku1.value) + Number(sku2.value) === 0) return alert('กรุณาเลือกสินค้าอย่างน้อย 1 แท่ง');
+      btn.disabled = true; btn.innerText = 'กำลังส่งข้อมูล...';
+      fetch(URL, {
+        method: 'POST',
+        body: JSON.stringify({
+          fullName: fullName.value, phone: phone.value, address: address.value,
+          sku1: sku1.value, sku2: sku2.value, total: calc()
+        })
+      }).then(() => {
+        alert('สั่งซื้อสำเร็จ!'); orderForm.reset(); calc();
+      }).finally(() => { btn.disabled = false; btn.innerText = 'ยืนยันการสั่งซื้อ'; });
+    };
+  </script>https://script.google.com/macros/s/AKfycbxjt8xGrXbPHiAAYmJulSB8hV18C_DOMlKzZqQherJRyg9dxGGYu6GweOs_kxelPccM/exec
+</body>
+</html>
